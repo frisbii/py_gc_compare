@@ -24,7 +24,7 @@ def mac():
     return x
 
 def short_lives():
-    for i in range(1000000):
+    for i in range(100000):
         n1 = Node()
         n2 = Node()
         n1.next = n2
@@ -33,7 +33,7 @@ def short_lives():
     return 0
 
 def short_cycles():
-    for i in range(1000000):
+    for i in range(100000):
         n1 = Node()
         n2 = Node()
         n1.next = n2
