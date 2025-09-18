@@ -1,6 +1,10 @@
 import time
+import os
 import sys
+import csv
 
+TIMESTAMP = ""
+INTERPRETER = ""
 time_base = 0
 
 def baseline():
@@ -27,6 +31,14 @@ def short_cycles():
         b["baz"] = a
     return 0
 
+def write_result(benchmark, result, speedup=1.0):
+    outpath = "./results/%s.csv" % TIMESTAMP
+    with open(outpath, "a") as f:
+        writer = csv.writer(f, lineterminator="\n")
+        if not os.path.getsize(outpath):
+            writer.writerow(["interpreter", "benchmark", "result", "speedup"])
+        writer.writerow([INTERPRETER, benchmark, result, speedup])
+
 def run(benchmark):
     global time_base
     times = []
@@ -37,6 +49,7 @@ def run(benchmark):
         times.append(t1 - t0)
     bench_name = benchmark.__name__
     avg = sum(times) / len(times)
+    speedup = 1.0
 
     if bench_name == "baseline":
         print("\t" + ("%s avg: " % bench_name).ljust(20) + "%.10f" % avg)
@@ -44,10 +57,16 @@ def run(benchmark):
     else:
         speedup = time_base / avg
         print("\t" + ("%s avg: " % bench_name).ljust(20) + "%.10f" % avg + "\t\tspeedup: %.3fx" % speedup)
+    
+    write_result(bench_name, avg, speedup)
 
 
 
 if __name__ == "__main__":
+
+    TIMESTAMP = sys.argv[1]
+    INTERPRETER = sys.argv[2]
+
     tests = [baseline, mac, short_lives, short_cycles]
     for test in tests:
         run(test)

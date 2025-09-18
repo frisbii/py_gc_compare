@@ -15,23 +15,29 @@ for /f "tokens=1,2 delims==" %%A in (config.ini) do (
     if "!line!"=="JY_PATH" set "JY_PATH=!value!"
 )
 
+for /f "tokens=2 delims==." %%A in ('wmic os get localdatetime /value') do set localdatetime=%%A
+set timestamp=%localdatetime:~2,6%-%localdatetime:~8,6%
+
+if not exist "./results" mkdir results
+type nul >results/"%timestamp%.csv"
+
 echo.
 echo #################################################
 echo CPYTHON:
 
-%CPY_PATH% main.py
+%CPY_PATH% main.py %timestamp% CPY
 
 echo.
 echo #################################################
 echo PYPY:
-%PYPY_PATH% main.py
+%PYPY_PATH% main.py %timestamp% PYPY
 
 echo.
 echo #################################################
 echo IRONPYTHON:
-%IPY_PATH% main.py
+%IPY_PATH% main.py %timestamp% IPY
 
 echo.
 echo #################################################
 echo JYTHON:
-java -jar %JY_PATH% main.py
+java -jar %JY_PATH% main.py %timestamp% JPY
