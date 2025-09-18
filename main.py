@@ -7,6 +7,10 @@ TIMESTAMP = ""
 INTERPRETER = ""
 time_base = 0
 
+class Node:
+    def __init__(self):
+        self.next = None
+
 def baseline():
     x = 0
     for i in range(100000):
@@ -20,16 +24,24 @@ def mac():
     return x
 
 def short_lives():
-    for i in range(100000):
-        x = [0,1,2,3]
+    for i in range(1000000):
+        n1 = Node()
+        n2 = Node()
+        n1.next = n2
+        n2.next = n2
+        del n1, n2
     return 0
 
 def short_cycles():
-    for i in range(100000):
-        a, b = {}, {}
-        a["fiz"] = b
-        b["baz"] = a
+    for i in range(1000000):
+        n1 = Node()
+        n2 = Node()
+        n1.next = n2
+        n2.next = n1
+        del n1, n2
     return 0
+
+
 
 def write_result(benchmark, result, speedup=1.0):
     outpath = "./results/%s.csv" % TIMESTAMP
