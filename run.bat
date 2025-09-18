@@ -1,23 +1,37 @@
 @echo off
+setlocal enabledelayedexpansion
 
+REM https://www.python.org/downloads/release/python-2718/
+REM https://pypy.org/download.html
+REM https://www.jython.org/download.html
+REM https://github.com/IronLanguages/ironpython2/releases/tag/ipy-2.7.12
 
+for /f "tokens=1,2 delims==" %%A in (config.ini) do (
+    set "line=%%A"
+    set "value=%%B"
+    if "!line!"=="CPY_PATH" set "CPY_PATH=!value!"
+    if "!line!"=="PYPY_PATH" set "PYPY_PATH=!value!"
+    if "!line!"=="IPY_PATH" set "IPY_PATH=!value!"
+    if "!line!"=="JY_PATH" set "JY_PATH=!value!"
+)
 
 echo.
 echo #################################################
 echo CPYTHON:
-C:/Python27/python.exe main.py
+
+%CPY_PATH% main.py
 
 echo.
 echo #################################################
 echo PYPY:
-C:/Users/madig/Downloads/pypy2.7-v7.3.20-win64/pypy2.7-v7.3.20-win64/pypy.exe main.py
+%PYPY_PATH% main.py
 
 echo.
 echo #################################################
 echo IRONPYTHON:
-"C:/Program Files/IronPython 2.7/ipy.exe" main.py
+%IPY_PATH% main.py
 
 echo.
 echo #################################################
 echo JYTHON:
-java -jar "C:\Users\madig\Downloads\jython2.7.4\jython.jar" main.py
+java -jar %JY_PATH% main.py
